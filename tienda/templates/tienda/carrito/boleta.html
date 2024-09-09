@@ -1,0 +1,66 @@
+{% extends 'tienda/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Boleta de Compra</h2>
+    <div>
+        <h1>Boleta N°{{ boleta.id }}</h1>
+        <p>Usuario: {{ boleta.usuario.username }}</p>
+        <p>Total Pagado: ${{ boleta.total }}</p>
+        <p>Fecha: {{ boleta.fecha }}</p>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order_items %}
+            <tr>
+                <td>{{ item.producto.nombre }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>{{ item.producto.precio }}</td>
+                <td>${{ item.total|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2>Detalle de la Orden</h2>
+<ul>
+    {% for item in order_items %}
+        <li>{{ item.producto.nombre }} - {{ item.cantidad }} x ${{ item.total }}</li>
+    {% endfor %}
+</ul>
+    <div class="d-flex justify-content-center mt-4">
+        <a href="{% url 'index' %}" class="btn btn-black">Volver a la tienda</a>
+    </div>
+</div>
+
+<style>
+    .table thead th {
+        background-color: #000;
+        color: #fff;
+    }
+
+    .btn-black {
+        background-color: #000;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-black:hover {
+        background-color: #4f4f4f;
+        color: #fff;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+</style>
+{% endblock %}

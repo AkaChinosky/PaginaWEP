@@ -1,0 +1,120 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}{{ producto.nombre }} - Detalles{% endblock %}
+
+{% block content %}
+<style>
+    /* Contenedor de la imagen del producto */
+    .product-image-container {
+        overflow: hidden;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .product-image {
+        width: 100%;
+        height: auto;
+        transition: transform 0.5s ease, opacity 0.5s ease;
+    }
+    
+    .product-image-container:hover .product-image {
+        transform: scale(1.15);
+        opacity: 0.85;
+    }
+    
+    /* Detalles del producto */
+    .product-details {
+        padding: 20px;
+    }
+    
+    .product-name {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+    }
+    
+    .product-price {
+        font-size: 1.8rem;
+        color: #555;
+        margin-bottom: 15px;
+    }
+    
+    /* Botones estilizados */
+    .btn-black {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 15px 35px;
+        font-size: 1.2rem;
+        border-radius: 40px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .btn-black:hover {
+        background-color: #444;
+        transform: translateY(-3px);
+    }
+    
+    .btn-lg {
+        font-size: 1.1rem;
+        padding: 12px 25px;
+        border-radius: 35px;
+    }
+    
+    .container {
+        margin-top: 50px;
+    }
+    
+    /* Media queries para dispositivos móviles */
+    @media (max-width: 768px) {
+        .product-image-container {
+            margin-bottom: 30px;
+        }
+    
+        .product-name {
+            font-size: 2rem;
+        }
+    
+        .product-price {
+            font-size: 1.5rem;
+        }
+    }
+    </style>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="product-image-container">
+                <img src="{{ producto.foto.url }}" alt="{{ producto.nombre }}" class="img-fluid product-image">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="product-details">
+                <h1 class="product-name">{{ producto.nombre }}</h1>
+                <p class="product-price"><strong>Precio:</strong> ${{ producto.precio }}</p>
+                <p><strong>Tallas disponibles:</strong> {{ producto.tallas }}</p>
+                <p><strong>Cantidad disponible:</strong> {{ producto.stock }}</p>
+                <p><strong>Envío:</strong> Envío a todas las regiones</p>
+                <p>{{ producto.descripcion }}</p>
+
+                <!-- Botón para agregar al carrito -->
+                {% if user.is_authenticated %}
+                    <form action="{% url 'agregar_al_carrito' producto.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-black btn-lg">Agregar al Carrito</button>
+                    </form>
+                {% else %}
+                    <p>Debes <a href="{% url 'login' %}">iniciar sesión</a> o <a href="{% url 'registro' %}">registrarte</a> para poder comprar este producto.</p>
+                {% endif %}
+
+                <a href="{% url 'index' %}" class="btn btn-black btn-lg mt-3">Volver a la tienda</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,92 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}Orden Confirmada - Tienda de Zapatillas{% endblock %}
+
+{% block content %}
+<style>
+    .container {
+        max-width: 800px;
+        margin-top: 50px;
+    }
+
+    .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        background-color: #000;
+        color: #fff;
+        text-align: center;
+        font-weight: 700;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .card-body {
+        padding: 30px;
+        text-align: center;
+    }
+
+    .card-body h4 {
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .order-details {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+    .order-details p {
+        margin-bottom: 5px;
+    }
+
+    .order-details strong {
+        color: #000;
+    }
+
+    .btn {
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 0;
+        background-color: #000;
+        border-color: #000;
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #4f4f4f;
+        border-color: #4f4f4f;
+        color: #fff;
+    }
+
+    .btn-back {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            ¡Gracias por tu compra!
+        </div>
+        <div class="card-body">
+            <h4>Tu orden ha sido confirmada</h4>
+            <div class="order-details">
+                <p><strong>Número de Orden:</strong> {{ orden.id }}</p>
+                <p><strong>Nombre:</strong> {{ orden.nombre }}</p>
+                <p><strong>Apellido:</strong> {{ orden.apellido }}</p>
+                <p><strong>Dirección:</strong> {{ orden.direccion }}</p>
+                <p><strong>Teléfono:</strong> {{ orden.telefono }}</p>
+                <p><strong>Email:</strong> {{ orden.email }}</p>
+                <p><strong>Total Pagado:</strong> ${{ orden.total_pagado }}</p>
+                <p><strong>Fecha de la orden: </strong>{{ orden.created_at|date:"d/m/Y H:i" }}</p>
+            </div>
+            <p>Te hemos enviado un correo de confirmación con los detalles de tu compra.</p>
+            <a href="{% url 'index' %}" class="btn btn-black btn-back">Volver a la tienda</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

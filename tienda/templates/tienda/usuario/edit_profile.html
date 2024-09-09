@@ -1,0 +1,110 @@
+{% extends 'tienda/base.html' %}
+{% block content %}
+<div class="registration-container">
+    <h2>Modificar Perfil</h2>
+    <form method="POST" id="profileForm">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+        <label for="first_name" class="form-label">Nombre</label>
+        <input type="text" class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+        <div class="invalid-feedback">
+            {% for error in form.first_name.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="last_name" class="form-label">Apellido</label>
+        <input type="text" class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+        <div class="invalid-feedback">
+            {% for error in form.last_name.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="telefono" class="form-label">Teléfono</label> <!-- Cambié 'phone_number' por 'telefono' para coincidir con el modelo -->
+        <input type="text" class="form-control {% if form.telefono.errors %}is-invalid{% endif %}" id="telefono" name="telefono" value="{{ user.telefono }}" pattern="\+?\d{9,15}" required>
+        <div class="invalid-feedback">
+            {% for error in form.telefono.errors %}
+                {{ error }}
+            {% endfor %}
+            <small class="text-muted">Ejemplo: +56912345678</small>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="genero" class="form-label">Género</label> <!-- Cambié 'gender' por 'genero' para coincidir con el modelo -->
+        <select class="form-control {% if form.genero.errors %}is-invalid{% endif %}" id="genero" name="genero" required>
+            <option value="">Seleccione una opción</option>
+            <option value="H" {% if user.genero == "H" %}selected{% endif %}>Hombre</option>
+            <option value="M" {% if user.genero == "M" %}selected{% endif %}>Mujer</option>
+        </select>
+        <div class="invalid-feedback">
+            {% for error in form.genero.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="rut" class="form-label">RUT</label>
+        <input type="text" class="form-control {% if form.rut.errors %}is-invalid{% endif %}" id="rut" name="rut" value="{{ form.rut.value|default_if_none:'' }}" required>
+        <small class="form-text">Ejemplo: 12345678-9</small>
+        <div class="invalid-feedback">
+            {% for error in form.rut.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
+</form>
+</div>
+
+<style>
+    .registration-container {
+        background-color: #e9ecef;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .registration-container h2 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #343a40;
+    }
+
+    .registration-container .form-label {
+        font-weight: bold;
+        color: #495057;
+    }
+
+    .registration-container .btn-primary {
+        background-color: #000;
+        border-color: #000;
+    }
+
+    .registration-container .btn-primary:hover {
+        background-color: #343a40;
+        border-color: #343a40;
+    }
+
+    .registration-container .invalid-feedback {
+        display: block;
+    }
+
+    .registration-container small.text-muted {
+        display: block;
+        margin-top: 0.25rem;
+    }
+</style>
+
+
+{% endblock %}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Registro</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+
+        .registration-container {
+            background-color: #e9ecef;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .registration-container h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #343a40;
+        }
+
+        .registration-container .form-label {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .registration-container .form-text {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .registration-container .btn-primary {
+            background-color: #000;
+            border-color: #000;
+        }
+
+        .registration-container .btn-primary:hover {
+            background-color: #343a40;
+            border-color: #343a40;
+        }
+
+        .registration-container .form-text {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .registration-container a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .registration-container a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-light bg-light w-100 position-absolute top-0 start-0 px-3">
+        <a class="navbar-brand" href="{% url 'index' %}">Tienda de Zapatillas</a>
+    </nav>
+
+
+    <div class="registration-container">
+        <h2>Registro de Usuario</h2>
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">Nombre de Usuario</label>
+                <input type="text" class="form-control {% if form.username.errors %}is-invalid{% endif %}" id="username" name="username" value="{{ form.username.value|default_if_none:'' }}" required>
+                <small class="form-text">Ejemplo: juan_perez</small>
+                <div class="invalid-feedback">
+                    {% for error in form.username.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Correo Electrónico</label>
+                <input type="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" id="email" name="email" value="{{ form.email.value|default_if_none:'' }}" required>
+                <small class="form-text">Ejemplo: correo@dominio.com</small>
+                <div class="invalid-feedback">
+                    {% for error in form.email.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="rut" class="form-label">RUT</label>
+                <input type="text" class="form-control {% if form.rut.errors %}is-invalid{% endif %}" id="rut" name="rut" value="{{ form.rut.value|default_if_none:'' }}" required>
+                <small class="form-text">Ejemplo: 12345678-9</small>
+                <div class="invalid-feedback">
+                    {% for error in form.rut.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control {% if form.password.errors %}is-invalid{% endif %}" id="password" name="password" required>
+                <small class="form-text">Debe contener al menos 8 caracteres.</small>
+                <div class="invalid-feedback">
+                    {% for error in form.password.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="password2" class="form-label">Confirmar Contraseña</label>
+                <input type="password" class="form-control {% if form.password2.errors %}is-invalid{% endif %}" id="password2" name="password2" required>
+                <div class="invalid-feedback">
+                    {% for error in form.password2.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+        </form>
+        <p class="form-text">¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a></p>
+    </div>
+</body>
+</html>

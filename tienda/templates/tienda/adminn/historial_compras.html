@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Historial de Compras</h2>
+<table class="table table-hover table-responsive">
+    <thead class="table-dark">
+        <tr>
+            <th>Usuario</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Fecha de Compra</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for compra in compras %}
+        <tr>
+            <td>{{ compra.usuario.username }}</td>
+            <td>{{ compra.producto.nombre }}</td>
+            <td>{{ compra.cantidad }}</td>
+            <td>{{ compra.fecha_compra|date:"d/m/Y H:i" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'tienda/base.html' %}
+{% block content %}
+<div class="profile-container">
+    <h2>Perfil de Usuario</h2>
+    <p><strong>Nombre:</strong> {{ user.first_name }}</p>
+    <p><strong>Apellido:</strong> {{ user.last_name }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Teléfono:</strong> {{ user.telefono }}</p>  <!-- Cambiado a 'telefono' -->
+    <p><strong>Género:</strong> {{ user.get_genero_display }}</p>  <!-- Cambiado a 'genero' -->
+    <p><strong>RUT:</strong> {{ user.rut }}</p>
+    <a href="{% url 'edit_profile' %}" class="btn btn-primary w-100">Modificar Perfil</a>
+</div>
+
+
+<style>
+    .profile-container {
+        background-color: #e9ecef;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .profile-container h2 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #343a40;
+    }
+
+    .profile-container p {
+        color: #495057;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-container p strong {
+        font-weight: bold;
+        color: #000;
+    }
+
+    .profile-container .btn-primary {
+        background-color: #000;
+        border-color: #000;
+    }
+
+    .profile-container .btn-primary:hover {
+        background-color: #343a40;
+        border-color: #343a40;
+    }
+</style>
+{% endblock %}

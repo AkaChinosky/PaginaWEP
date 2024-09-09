@@ -1,0 +1,213 @@
+{% extends 'tienda/base.html' %}
+{% block content %}
+<style>
+    /* Estilos generales */
+    .container {
+        max-width: 1200px;
+    }
+
+    h2 {
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .table {
+        border-collapse: separate;
+        border-spacing: 0 15px;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .table thead {
+        background-color: #000;
+        color: #fff;
+    }
+
+    .table tbody td {
+        vertical-align: middle;
+    }
+
+    /* Imagen del producto */
+    .product-image-container {
+        max-width: 120px;
+        margin-right: 15px;
+    }
+
+    .product-image {
+        width: 100%;
+        transition: transform 0.3s ease;
+    }
+
+    .product-image-container:hover .product-image {
+        transform: scale(1.1);
+    }
+
+    /* Botones */
+    .btn {
+        font-weight: 600;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        border-radius: 0;
+    }
+
+    .btn-black {
+        background-color: #000;
+        border-color: #000;
+        color: #fff;
+    }
+
+    .btn-black:hover {
+        background-color: #4f4f4f;
+        border-color: #4f4f4f;
+        color: #fff;
+    }
+
+    .btn-delete {
+        background-color: #ff4d4f;
+        border-color: #ff4d4f;
+        color: #fff;
+    }
+
+    .btn-delete:hover {
+        background-color: #d9363e;
+        border-color: #d9363e;
+        color: #fff;
+    }
+
+    .btn-apply-coupon {
+        background-color: #000;
+        border-color: #000;
+        color: #fff;
+    }
+
+    .btn-apply-coupon:hover {
+        background-color: #4f4f4f;
+        border-color: #4f4f4f;
+        color: #fff;
+    }
+
+    .btn-checkout {
+        background-color: #000;
+        border-color: #000;
+        color: #fff;
+    }
+
+    .btn-checkout:hover {
+        background-color: #4f4f4f;
+        border-color: #4f4f4f;
+        color: #fff;
+    }
+
+    /* Cantidad */
+    .input-group {
+        max-width: 150px;
+        margin: auto;
+    }
+
+    .form-control {
+        border-radius: 0;
+        box-shadow: none;
+        text-align: center;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #000;
+        box-shadow: none;
+    }
+
+    .input-group-btn .btn {
+        border-radius: 0;
+        border-color: #000;
+        background-color: #000;
+        color: #fff;
+    }
+
+    .input-group-btn .btn:hover {
+        background-color: #4f4f4f;
+        border-color: #4f4f4f;
+        color: #fff;
+    }
+
+    /* Mensaje de error para cupones */
+    .invalid-coupon {
+        color: #ff4d4f;
+        font-weight: 600;
+    }
+
+</style>
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Carrito de Compras</h2>
+
+    {% if items %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="product-image-container">
+                                <img src="{{ item.producto.foto.url }}" alt="{{ item.producto.nombre }}" class="product-image">
+                            </div>
+                            {{ item.producto.nombre }}
+                        </div>
+                    </td>
+                    <td>{{ item.producto.descripcion }}</td>
+                    <td>{{ item.producto.precio }}</td>
+                    <td>
+                        <div class="input-group">
+                            <form method="POST" action="{% url 'actualizar_cantidad' item.producto.id %}">
+                                {% csrf_token %}
+                                <input type="number" name="cantidad" value="{{ item.cantidad }}" min="1" class="form-control" onchange="this.form.submit();">
+                            </form>
+                        </div>
+                    </td>
+                    <td>${{ total }}</td>
+                    <td>
+                        <form method="POST" action="{% url 'eliminar_item' item.producto.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-delete btn-sm">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-end">
+            <h4>Total: ${{ total }}</h4>
+        </div>
+
+        <form method="POST" action="{% url 'aplicar_cupon' %}" class="mt-4">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="cupon">Código de Cupón:</label>
+                <input type="text" name="cupon" class="form-control" id="cupon" required>
+                {% if cupon_error %}
+                    <p class="invalid-coupon">{{ cupon_error }}</p>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-black btn-apply-coupon mt-2">Aplicar Cupón</button>
+        </form>
+
+        <div class="d-flex justify-content-end mt-4">
+            <a href="{% url 'checkout' %}" class="btn btn-black btn-checkout">Proceder al Pago</a>
+        </div>
+    {% else %}
+        <p class="text-center mt-4">Tu carrito está vacío.</p>
+    {% endif %}
+</div>
+{% endblock %}

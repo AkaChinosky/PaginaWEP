@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos en {{ categoria.nombre }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-body {
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: black;
+            border-color: black;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: grey;
+            border-color: grey;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .card-text {
+            font-size: 1rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Productos en la categoría: {{ categoria.nombre }}</h2>
+        <div class="row">
+            {% for producto in productos %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <img src="{{ producto.foto.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ producto.nombre }}</h5>
+                            <p class="card-text">{{ producto.descripcion }}</p>
+                            <p class="card-text"><strong>${{ producto.precio }}</strong></p>
+                            <!-- Botón para abrir el modal -->
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detalleProductoModal{{ producto.id }}">
+                                Ver Detalles
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="detalleProductoModal{{ producto.id }}" tabindex="-1" aria-labelledby="detalleProductoLabel{{ producto.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="detalleProductoLabel{{ producto.id }}">{{ producto.nombre }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <img src="{{ producto.foto.url }}" class="img-fluid" alt="{{ producto.nombre }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{ producto.descripcion }}</p>
+                                        <p><strong>Precio: </strong>${{ producto.precio }}</p>
+                                        <p><strong>Tallas disponibles: </strong>{{ producto.tallas }}</p>
+                                        <p><strong>Stock: </strong>{{ producto.stock }}</p>
+                                        <p><strong>Envío: </strong>{{ producto.envio }}</p>
+                                        
+                                        <!-- Botón para agregar al carrito -->
+                                        <form action="{% url 'agregar_al_carrito' producto.id %}" method="post">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-success">Agregar al Carrito</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

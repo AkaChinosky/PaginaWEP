@@ -1,0 +1,11 @@
+{% extends 'tienda/base.html' %}
+{% block content %}
+<h2>Mis Favoritos</h2>
+<ul class="list-group">
+    {% for item in favorites %}
+        <li class="list-group-item">
+            <a href="{% url 'product_detail' item.id %}">{{ item.name }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

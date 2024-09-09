@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Panel de Control</h2>
+<a href="{% url 'agregar_producto' %}" class="btn btn-success mb-3">Agregar Producto</a>
+<table class="table table-hover table-responsive">
+    <thead class="table-dark">
+        <tr>
+            <th>Foto</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Unidades Totales</th>
+            <th>Unidades por Talla</th>
+            <th>Género</th>
+            <th>Sección</th>
+            <th>Categoría</th>
+            <th>Oferta</th>
+            <th>Fecha de Registro</th>
+            <th>Administrador</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for producto in productos %}
+        <tr>
+            <td><img src="{{ producto.foto.url }}" alt="{{ producto.nombre }}" class="img-thumbnail" style="width: 100px;"></td>
+            <td>{{ producto.nombre }}</td>
+            <td>${{ producto.precio }}</td>
+            <td>{{ producto.unidades }}</td>
+            <td>
+                <ul class="list-unstyled">
+                    {% for talla, cantidad in producto.unidades_por_talla.items %}
+                    <li>{{ cantidad }} unidades de talla {{ talla }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>{{ producto.get_genero_display }}</td>
+            <td>{{ producto.get_seccion_display }}</td>
+            <td>{{ producto.get_categoria_display }}</td>
+            <td>{{ producto.es_oferta|yesno:"Sí,No" }}</td>
+            <td>{{ producto.fecha_registro|date:"d/m/Y H:i" }}</td>
+            <td>{{ producto.admin.username }}</td>
+            <td>
+                <a href="{% url 'editar_producto' producto.id %}" class="btn btn-primary btn-sm">Editar</a>
+                <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este producto?');">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
